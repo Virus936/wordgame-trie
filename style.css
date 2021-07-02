@@ -1,0 +1,30 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing:border-box;
+}
+
+#corp{
+  display: flex;
+  flex-direction: column;
+  background-color: lightblue;
+
+}
+li{
+  list-style-type: none;
+}
+#toGuess{
+  display:none;
+}
+.tableau{
+  display:flex;
+  flex-direction:row;
+  justify-content:space-around;
+  gap:10px;
+}
+.tableau > * { 
+  width:90px;
+}
+.element h2{
+  text-align:center;
+}

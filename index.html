@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Trie test</title>
+    <link rel="stylesheet" href="./style.css" type="text/css" media="all">
+  </head>
+  <body>
+    <header style="display:flex">
+      <div>
+        <select name="level" id="some_name" >
+          <option value="5">5</option>
+          <option value="6">6</option>
+          <option value="7">7</option>
+          <option value="8">8</option>
+          <option value="9">9</option>
+          <option value="10">10</option>
+          <option value="11">11</option>
+        </select>
+      </div>
+
+      <button id="refresh">Nouvelle partie</button>
+      <div id="charlist">
+      </div>
+    </header>
+    <form>
+      <input id='play' type="text">
+      <button id='try'>jouer</button>
+    </form>
+
+    <form>
+      <input id='toGuess' type="text">
+    </form>
+
+    <div id='corp'>
+      <div class="element">
+        <h2>Réponse trouvé</h2>
+        <div class='tableau' id="guessed">
+        </div>
+      </div>
+      <div class="element">
+      <button id="allword">Reponse</button>
+        <h2>Solution restante(s) :</h2>
+        <div class="tableau" id="solution">
+        </div>
+      </div>
+    </div>
+    <template id="randomChar">
+      <span class="char"></span>
+    </template>
+    <script type=module src="./static/js/app.js" charset="utf-8"></script>
+  </body>
+</html>

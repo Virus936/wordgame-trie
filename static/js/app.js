@@ -67,7 +67,6 @@ refresh.addEventListener('click', e => {
   e.preventDefault()
   const lvl = parseInt(document.querySelector('select').value)
   let toGuess = newgame(lvl)
-  console.log('toGess: ', toGuess);
 })
 
 const handleWrongResponse = (input) => {
@@ -104,4 +103,38 @@ play.addEventListener('click', e =>{
   if (goodResponse) { handleGoodResponse(input.value, true) }
   else{ handleWrongResponse(input.value) }
   input.select()
+})
+
+// ----------- ScrabbleHelper
+
+
+const scrabbleButton = document.querySelector('#scrabbleButton')
+scrabbleButton.addEventListener('click', e => {
+  e.preventDefault()
+
+  const charsetScrabbleHelper = document.querySelector('input#charset').value
+  let response =new Set( allWords('',charsetScrabbleHelper.split(''),arbre))
+  response = [...response]
+  response = response.sort((a,b) => a.length > b.length ? -1 : 1)
+  const scrabbleSoluce = {}
+  for (let i = 1; i <= response[0].length; i++) {
+    scrabbleSoluce[i] = response.filter(word => word.length == i)
+  }
+
+  const scrabbleTable = document.querySelector('#scrabbleSolution')
+  for (const prop in scrabbleSoluce) {
+    const ul = document.createElement('ul')
+    const title = document.createElement('h2')
+    title.innerHTML =`${prop} lettre(s) -- (${prop.length} soluce)`
+    ul.appendChild(title)
+    ul.setAttribute('data-size',prop)
+    scrabbleSoluce[prop].forEach( (word) => {
+      const li = document.createElement('li')
+      li.innerHTML = word
+      ul.appendChild(li)
+    } )
+    scrabbleTable.appendChild(ul)
+
+  }
+  const table = document.createElement('ul')
 })

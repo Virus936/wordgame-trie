@@ -28,3 +28,16 @@ li{
 .element h2{
   text-align:center;
 }
+
+
+#scrabbleSolution{
+  display:flex;
+  flex-direction:row;
+  justify-content:space-around;
+}
+
+#scrabbleSolution > * {
+  width:90px;
+  margin:10px;
+
+}

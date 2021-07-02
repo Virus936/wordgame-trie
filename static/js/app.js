@@ -20,6 +20,7 @@ const button = document.querySelector('button#allword')
 button.addEventListener('click', e =>{
   e.preventDefault()
   const input = document.querySelector('input#toGuess')
+
   let response =new Set( allWords('',input.value.split(''),arbre))
   response = [...response]
   response = response.filter(word => word.length > 2)

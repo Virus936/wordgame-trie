@@ -16,16 +16,20 @@ export function strNoAccent(a) {
 export const allWords = (begin , chars, trie) => {
   let result = []
 
-  if (trie.contains(begin)) {
-    result.push(begin)
-  }
 
+  let listChar = []
   if (trie.isValid(begin)) {
     chars.forEach(char =>{
-      let copychar = chars.slice()
-      copychar.splice(chars.indexOf(char),1)
-      result.push(allWords(begin+char,copychar,trie ))
+      if (listChar.indexOf(char)<0) {
+        listChar.push(char)
+        let copychar = chars.slice()
+        copychar.splice(chars.indexOf(char),1)
+        result.push(allWords(begin+char,copychar,trie ))
+      }
     })
+  }
+  if (trie.contains(begin)) {
+    result.push(begin)
   }
   return result.flat()
 }

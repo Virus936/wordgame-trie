@@ -3,8 +3,6 @@ import { gutenberg } from './gutenberg.js'
 import { strRandom, fillChar, strNoAccent,splitToSpan, allWords } from './function.js'
 
 //building of my Trie tree
-//
-
 
 const arbre = new Trie()
 const gutenbergList = gutenberg.split('\n')
@@ -21,8 +19,7 @@ button.addEventListener('click', e =>{
   e.preventDefault()
   const input = document.querySelector('input#toGuess')
 
-  let response =new Set( allWords('',input.value.split(''),arbre))
-  response = [...response]
+  let response =allWords('',input.value.split(''),arbre)
   response = response.filter(word => word.length > 2)
   response
     .sort((a,b) => a.length > b.length ? -1 : 1)
@@ -35,32 +32,37 @@ button.addEventListener('click', e =>{
 
 
 const newgame = (lvl) => {
-  document.querySelector('#charlist').innerHTML = ''
+  resetGame()
   let stringtest = strRandom(lvl)
   splitToSpan(stringtest)
   document.querySelector('input#toGuess').value = stringtest
-  const solution = document.querySelector('#solution')
-  const guessed = document.querySelector('#guessed')
 
-  solution.innerHTML = ''
-  guessed.innerHTML=''
-  let response =new Set( allWords('',stringtest.split(''),arbre))
-  response = [...response]
+  let response =allWords('',stringtest.split(''),arbre)
   wordtoguess = response.filter(word => word.length > 2)
     .sort((a,b) => a.length > b.length ? -1 : 1)
-  for (let i = 3 ; i <= wordtoguess[0].length ; i++) {
-    [guessed, solution].forEach(div =>{
+  //create answor box for response and solution
+  if (wordtoguess.length !== 0) {
+    for (let i = 3 ; i <= wordtoguess[0].length ; i++) {
+      [guessed, solution].forEach(div =>{
 
-      const ul = document.createElement('ul')
-      ul.classList.add('sorted_guessed')
-      ul.setAttribute('data-length',i)
-      const li = document.createElement('li')
-      li.innerHTML = `<strong>Réponse(s) à ${i} caractères`
-      ul.appendChild(li)
-      div.appendChild(ul)
-    })
+        const ul = document.createElement('ul')
+        ul.classList.add('sorted_guessed')
+        ul.setAttribute('data-length',i)
+        const li = document.createElement('li')
+        li.innerHTML = `<strong>Réponse(s) à ${i} caractères`
+        ul.appendChild(li)
+        div.appendChild(ul)
+      })
+    }
   }
   return stringtest
+}
+
+const resetGame = () => {
+  document.querySelector('#charlist').innerHTML = ''
+  solution.innerHTML = ''
+  guessed.innerHTML=''
+  finded = []
 }
 
 const refresh = document.querySelector('#refresh')
@@ -72,37 +74,38 @@ refresh.addEventListener('click', e => {
 
 const handleWrongResponse = (input) => {
   console.log('Wrong', input);
-  
 }
 
-const handleGoodResponse = (input, game) => {
+const handleGoodResponse = (input, game=true) => {
   let guessdiv
   if (game) {
-     guessdiv = document.querySelector('#guessed')
+    guessdiv = document.querySelector('#guessed')
     finded.push(input)
   }else{
-     guessdiv = document.querySelector('#solution')
+    guessdiv = document.querySelector('#solution')
   }
-    const length = input.length
+  const length = input.length
 
-    const newresponse = document.createElement('li')
+  const newresponse = document.createElement('li')
   if (finded.indexOf(input)>=0) {
     newresponse.style.color = 'green'
   }else{
     newresponse.style.color = 'firebrick'
   }
-    newresponse.innerHTML = input
-    guessdiv.querySelector(`ul[data-length="${length}"]`).appendChild(newresponse)
-    wordtoguess  = wordtoguess.filter(e=>e!==input)
+  newresponse.innerHTML = input
+  guessdiv.querySelector(`ul[data-length="${length}"]`).appendChild(newresponse)
+  wordtoguess  = wordtoguess.filter(e=>e!==input)
 }
 
 const play = document.querySelector('button#try')
 play.addEventListener('click', e =>{
   e.preventDefault()
   const input = document.querySelector('input#play')
-  const goodResponse = wordtoguess.lastIndexOf(input.value)>=0
-  if (goodResponse) { handleGoodResponse(input.value, true) }
-  else{ handleWrongResponse(input.value) }
+  const goodResponse = wordtoguess.indexOf(input.value)>=0
+
+  goodResponse ?
+    handleGoodResponse(input.value) : 
+    handleWrongResponse(input.value)
   input.select()
 })
 
@@ -114,8 +117,7 @@ scrabbleButton.addEventListener('click', e => {
   e.preventDefault()
 
   const charsetScrabbleHelper = document.querySelector('input#charset').value
-  let response =new Set( allWords('',charsetScrabbleHelper.split(''),arbre))
-  response = [...response]
+  let response =allWords('',charsetScrabbleHelper.split(''),arbre)
   response = response.sort((a,b) => a.length > b.length ? -1 : 1)
   const scrabbleSoluce = {}
   for (let i = 1; i <= response[0].length; i++) {
@@ -123,6 +125,7 @@ scrabbleButton.addEventListener('click', e => {
   }
 
   const scrabbleTable = document.querySelector('#scrabbleSolution')
+  scrabbleTable.innerHTML = ''
   for (const prop in scrabbleSoluce) {
     const ul = document.createElement('ul')
     const title = document.createElement('h2')
@@ -138,4 +141,6 @@ scrabbleButton.addEventListener('click', e => {
 
   }
   const table = document.createElement('ul')
+
+  document.querySelector('input#charset').select()
 })

@@ -2,6 +2,7 @@ import { Trie } from './Trie.js'
 import { gutenberg } from './gutenberg.js'
 import { strRandom, fillChar, strNoAccent,splitToSpan, allWords } from './function.js'
 
+
 //building of my Trie tree
 
 const arbre = new Trie()
@@ -10,14 +11,18 @@ console.log('not ready');
 gutenbergList.forEach(word => {
   arbre.insert(strNoAccent(word)) 
 })
+let finded = []
 let wordtoguess = []
 console.log('ready');
-let finded = []
+
 
 const button = document.querySelector('button#allword')
 button.addEventListener('click', e =>{
   e.preventDefault()
   const input = document.querySelector('input#toGuess')
+
+  guessed.innerHTML = ''
+  setUpGame()
 
   let response =allWords('',input.value.split(''),arbre)
   response = response.filter(word => word.length > 2)
@@ -29,11 +34,17 @@ button.addEventListener('click', e =>{
   input.value = ''
 })
 
+const initialState = () => {
+  finded = []
+  wordtoguess = []
+}
 
 
 const newgame = (lvl) => {
+  initialState()
   resetGame()
-  let stringtest = strRandom(lvl)
+
+  let stringtest = strRandom(lvl).toLowerCase()
   splitToSpan(stringtest)
   document.querySelector('input#toGuess').value = stringtest
 
@@ -41,28 +52,28 @@ const newgame = (lvl) => {
   wordtoguess = response.filter(word => word.length > 2)
     .sort((a,b) => a.length > b.length ? -1 : 1)
   //create answor box for response and solution
-  if (wordtoguess.length !== 0) {
-    for (let i = 3 ; i <= wordtoguess[0].length ; i++) {
-      [guessed, solution].forEach(div =>{
-
-        const ul = document.createElement('ul')
-        ul.classList.add('sorted_guessed')
-        ul.setAttribute('data-length',i)
-        const li = document.createElement('li')
-        li.innerHTML = `<strong>Réponse(s) à ${i} caractères`
-        ul.appendChild(li)
-        div.appendChild(ul)
-      })
-    }
-  }
+  setUpGame()
   return stringtest
 }
 
+const setUpGame = () => {
+  if (wordtoguess.length !== 0) {
+    for (let i = 3 ; i <= wordtoguess[0].length ; i++) {
+      const ul = document.createElement('ul')
+      ul.classList.add('sorted_guessed')
+      ul.setAttribute('data-length',i)
+      const li = document.createElement('li')
+      li.innerHTML = `<strong>Réponse(s) à ${i} caractères`
+      ul.appendChild(li)
+      guessed.appendChild(ul)
+    }
+  }
+}
+
 const resetGame = () => {
+  //document.querySelector('#corp').style.display = 'flex'
   document.querySelector('#charlist').innerHTML = ''
-  solution.innerHTML = ''
   guessed.innerHTML=''
-  finded = []
 }
 
 const refresh = document.querySelector('#refresh')
@@ -77,12 +88,9 @@ const handleWrongResponse = (input) => {
 }
 
 const handleGoodResponse = (input, game=true) => {
-  let guessdiv
+  let guessdiv = document.querySelector('#guessed')
   if (game) {
-    guessdiv = document.querySelector('#guessed')
     finded.push(input)
-  }else{
-    guessdiv = document.querySelector('#solution')
   }
   const length = input.length
 
@@ -116,7 +124,7 @@ const scrabbleButton = document.querySelector('#scrabbleButton')
 scrabbleButton.addEventListener('click', e => {
   e.preventDefault()
 
-  const charsetScrabbleHelper = document.querySelector('input#charset').value
+  const charsetScrabbleHelper = document.querySelector('input#charset').value.toLowerCase()
   let response =allWords('',charsetScrabbleHelper.split(''),arbre)
   response = response.sort((a,b) => a.length > b.length ? -1 : 1)
   const scrabbleSoluce = {}
@@ -127,17 +135,20 @@ scrabbleButton.addEventListener('click', e => {
   const scrabbleTable = document.querySelector('#scrabbleSolution')
   scrabbleTable.innerHTML = ''
   for (const prop in scrabbleSoluce) {
-    const ul = document.createElement('ul')
-    const title = document.createElement('h2')
-    title.innerHTML =`${prop} lettre(s) -- (${prop.length} soluce)`
-    ul.appendChild(title)
-    ul.setAttribute('data-size',prop)
-    scrabbleSoluce[prop].forEach( (word) => {
-      const li = document.createElement('li')
-      li.innerHTML = word
-      ul.appendChild(li)
-    } )
-    scrabbleTable.appendChild(ul)
+    if (scrabbleSoluce[prop].length > 0) {
+      const ul = document.createElement('ul')
+      const title = document.createElement('h5')
+      title.innerHTML =`${prop} lettre(s) -- (${scrabbleSoluce[prop].length} soluce)`
+      ul.appendChild(title)
+      ul.setAttribute('data-size',prop)
+      scrabbleSoluce[prop].forEach( (word) => {
+        const li = document.createElement('li')
+        li.innerHTML = word
+        ul.appendChild(li)
+      } )
+      scrabbleTable.appendChild(ul)
+
+    }
 
   }
   const table = document.createElement('ul')

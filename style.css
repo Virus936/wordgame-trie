@@ -2,13 +2,101 @@
   margin: 0;
   padding: 0;
   box-sizing:border-box;
+  /*font-family: Capitals,Impact,fantasy;*/
+  /*font-family: 'Monotype Corsiva','Comic Sans MS',cursive;*/
+  font-family: Helvetica,Arial,sans-serif;
+  scrollbar-color:transparent transparent;
+}
+
+
+header{
+  display:flex;
+  flex-direction: column;
+  background-color:teal ;
+}
+#charlist{
+  display:flex;
+  flex-direction:row;
+  align-items:center;
+  justify-content: center;
+  height:300px;
+  width:100%;
+}
+
+button{
+  width:200px;
+  padding: 12px ;
+  background-color: violet;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+}
+#startgame{
+  position:absolute;
+  top:5px;
+  left:5px;
+  height:30px;
+}
+#startgame > *{
+  cursor:pointer;
+  border-radius:5px;
+  margin-right:10px;
+  outline:none;
+}
+#refresh{
+  color:snow;
+  font-size:30px;
+}
+
+.char{
+  display:flex;
+  justify-content:center;
+  align-items: center;
+  font-weight: bold;
+  border:solid 2px;
+  color:snow;
+  border-radius:5px;
+  width:60px;
+  height:60px;
+  margin:5px;
+}
+
+#gamebutton{
+  display:flex;
+  flex-direction: row;
+  padding: 10px;
+  align-items:center;
+  justify-content: center;
+}
+
+#gamebutton > form {
+  display:flex;
+  flex:1;
+  justify-content: center;
+}
+#play{ 
+  padding:12px 100px ;
+  outline:none;
+  border-radius:5px;
+  border:none;
+}
+#try{
+  display:none;
 }
 
 #corp{
-  display: flex;
+  display:flex;
   flex-direction: column;
+  padding:20px;
+  align-items:center;
   background-color: lightblue;
+  overflow-y:scroll;
+  overflow-x:scroll;
+  height: 250px;
 
+}
+#corp>*{
+  margin-top:20px;
 }
 li{
   list-style-type: none;
@@ -16,14 +104,20 @@ li{
 #toGuess{
   display:none;
 }
+
+
 .tableau{
   display:flex;
   flex-direction:row;
   justify-content:space-around;
-  gap:10px;
+  scrollbar-color:teal transparent;
 }
 .tableau > * { 
-  width:90px;
+  width:110px;
+}
+
+.element{
+  width:100%;
 }
 .element h2{
   text-align:center;
@@ -32,12 +126,15 @@ li{
 
 #scrabbleSolution{
   display:flex;
+  overflow-x:scroll;
   flex-direction:row;
-  justify-content:space-around;
+  overflow-y:scroll;
+  max-height:400px;
+  scrollbar-color:blue transparent;
+
 }
 
 #scrabbleSolution > * {
-  width:90px;
   margin:10px;
 
 }

@@ -25,13 +25,14 @@ button.addEventListener('click', e =>{
   setUpGame()
 
   let response =allWords('',input.value.split(''),arbre)
+  
   response = response.filter(word => word.length > 2)
   response
     .sort((a,b) => a.length > b.length ? -1 : 1)
     .forEach( res => {
       handleGoodResponse(res, false)
     })
-  input.value = ''
+  wordtoguess = response
 })
 
 const initialState = () => {
